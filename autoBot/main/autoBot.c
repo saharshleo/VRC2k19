@@ -174,23 +174,23 @@ void path_1(){
     read_sensors();
     calc_sensor_values();
     if(button1==0){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count1==0 || count1==1 || count1==6 || count1==8)){
+        if((count1==0 || count1==1 || count1==6 || count1==8) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count1++;
             //add delay if needed
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_LEFT==1 && (count1==2 || count1==7)){
+        else if((count1==2 || count1==7) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_LEFT==1){
             count1++;
             turnleft90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_LEFT==1 && count1==3){
+        else if(count1==3 && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_LEFT==1){
             count1++;
             turnright45();
         }
-        else if(sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400 && count1==4){
+        else if(count1==4 && sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400){
             count1++;
             turnleft45();
         }
-        else if(sensor[0]<150 && sensor_value[3]<150 && count1==5){
+        else if(count1==5 && sensor[0]<150 && sensor_value[3]<150){
             //ye condition check karna padega
             count1++;
             turnright45();
@@ -199,23 +199,23 @@ void path_1(){
     }
 
     else if(button1==1){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count1==0 || count1==1 || count1==6 || count1==8)){
+        if((count1==0 || count1==1 || count1==6 || count1==8) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count1++;
             //add delay if needed
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_RIGHT==1 && (count1==2 || count1==7)){
+        else if((count1==2 || count1==7) && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_RIGHT==1){
             count1++;
             turnright90();
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_RIGHT==1 && count1==3){
+        else if(count1==3 && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_RIGHT==1){
             count1++;
             turnleft45();
         }
-        else if(sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400 && count1==4){
+        else if(count1==4 && sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400){
             count1++;
             turnright45();
         }
-        else if(sensor[0]<150 && sensor_value[3]<150 && count1==5){
+        else if(count1==5 && sensor[0]<150 && sensor_value[3]<150){
             //ye condition check karna padega
             count1++;
             turnleft45();
@@ -226,23 +226,22 @@ void path_1(){
 
 
 void path_2A(){
-    arena();
     read_sensors();
     calc_sensor_values();
     if(button1==0){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count2A==0 || count2A==2 || count2A==6 || count2A==11)){
+        if((count2A==0 || count2A==2 || count2A==6 || count2A==11) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count2A++;
             //add delay if needed
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && LS_RIGHT==1 && count2A==1){
+        else if(count2A==1 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && LS_RIGHT==1){
             count2A++;
             turnright90();
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_RIGHT==1 && count2A==3){
+        else if(count2A==3 && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_RIGHT==1){
             count2A++;
             turnleft45();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]<150 && count2A==4){
+        else if(count2A==4 && sensor_value[0]<150 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]<150){
             count2A++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -253,16 +252,16 @@ void path_2A(){
                 }
             }
         }
-        else if(sensor[0]<150 && sensor_value[3]<150 && count2A==5){
+        else if(count2A==5 && sensor[0]<150 && sensor_value[3]<150){
             //ye condition check karna padega
             count2A++;
             turnright45();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count2A==8 || count2A==12)){
+        else if((count2A==8 || count2A==12) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count2A++;
             turnleft90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count2A==7 || count2A==9 || count2A==10)){
+        else if((count2A==7 || count2A==9 || count2A==10) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count2A++;
             //bot forward till single line
             while(1){
@@ -278,19 +277,19 @@ void path_2A(){
     }
 
     else if(button1==1){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count2A=0 || count2A==2 || count2A==6 || count2A==11)){
+        if((count2A=0 || count2A==2 || count2A==6 || count2A==11) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count2A++;
             //add delay if needed
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150 && LS_LEFT==1 && count2A==1){
+        else if(count2A==1 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150 && LS_LEFT==1){
             count2A++;
             turnleft90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_LEFT==1 && count2A==3){
+        else if(count2A==3 && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_LEFT==1){
             count2A++;
             turnright45();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]<150 && count2A==4){
+        else if(count2A==4 && sensor_value[0]<150 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]<150){
             count2A++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -301,16 +300,16 @@ void path_2A(){
                 }
             }
         }
-        else if(sensor[0]<150 && sensor_value[3]<150 && count2A==5){
+        else if(count2A==5 && sensor[0]<150 && sensor_value[3]<150){
             //ye condition check karna padega
             count2A++;
             turnleft45();
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count2A==8 || count2A==12)){
+        else if((count2A==8 || count2A==12) && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count2A++;
             turnright90();
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count2A==7 || count2A==9 || count2A==10)){
+        else if((count2A==7 || count2A==9 || count2A==10) && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count2A++;
             //bot forward till single line
             while(1){
@@ -331,19 +330,19 @@ void path_2B(){
     read_sensors();
     calc_sensor_values();
     if(button1==0){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count2B==0 || count2B==2 || count2B==10)){
+        if((count2B==0 || count2B==2 || count2B==10) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count2B++;
             //add delay if needed
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && count2B==1){
+        else if(count2B==1 && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count2B++;
             turnright90();
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_RIGHT==1 && count2B==3){
+        else if(count2B==3 && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_RIGHT==1){
             count2B++;
             turnleft45();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]<150 && count2B==4){
+        else if(count2B==4 && sensor_value[0]<150 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]<150){
             count2B++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -354,16 +353,16 @@ void path_2B(){
                 }
             }
         }
-        else if(sensor[0]<150 && sensor_value[3]<150 && count2B==5){
+        else if(count2B==5 && sensor[0]<150 && sensor_value[3]<150){
             //ye condition check karna padega
             count2B++;
             turnright45();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count2B==6 || count2B==7)){
+        else if((count2B==6 || count2B==7) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count2B++;
             turnleft90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count2B==8 || count2B==9)){
+        else if((count2B==8 || count2B==9) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count2B++;
             //bot forward till single line
             while(1){
@@ -375,7 +374,7 @@ void path_2B(){
                 }
             }
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && count2B==11){
+        else if(count2B==11 && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count2B++;
             turnright90();
         }
@@ -383,19 +382,19 @@ void path_2B(){
     }
 
     else if(button1==1){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count2B==0 || count2B==2 || count2B==10)){
+        if((count2B==0 || count2B==2 || count2B==10) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count2B++;
             //add delay if needed
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && count2B==1){
+        else if(count2B==1 && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count2B++;
             turnleft90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_LEFT==1 && count2B==3){
+        else if(count2B==3 && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && LS_LEFT==1){
             count2B++;
             turnright45();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]<150 && count2B==4){
+        else if(count2B==4 && sensor_value[0]<150 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]<150){
             count2B++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -406,16 +405,16 @@ void path_2B(){
                 }
             }
         }
-        else if(sensor[0]<150 && sensor_value[3]<150 && count2B==5){
+        else if(count2B==5 && sensor[0]<150 && sensor_value[3]<150){
             //ye condition check karna padega
             count2B++;
             turnleft45();
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count2B==6 || count2B==7)){
+        else if((count2B==6 || count2B==7) && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count2B++;
             turnright90();
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count2B==8 || count2B==9)){
+        else if((count2B==8 || count2B==9) && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count2B++;
             //bot forward till single line
             while(1){
@@ -427,7 +426,7 @@ void path_2B(){
                 }
             }
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && count2B==11){
+        else if(count2B==11 && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count2B++;
             turnleft90();
         }
@@ -440,19 +439,19 @@ void path_3A(){
     read_sensors();
     calc_sensor_values();
     if(button1==0){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count3A==0 || count3A==10)){
+        if((count3A==0 || count3A==10) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count3A++;
             turnright90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count3A==1 || count3A==9)){
+        else if((count3A==1 || count3A==9) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count3A++;
             //add delay if needed
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count3A==2 || count3A==6)){
+        else if((count3A==2 || count3A==6) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count3A++;
             turnright90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count3A==3 || count3A==5 || count3A==7 || count3A==8)){
+        else if((count3A==3 || count3A==5 || count3A==7 || count3A==8) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count3A++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -463,26 +462,26 @@ void path_3A(){
                 }
             }
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count3A==4)){
+        else if((count3A==4) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count3A++;
             turnleft90();
         }
         //last k liye condition
     }
     else if(button1==1){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count3A==0 || count3A==10)){
+        if((count3A==0 || count3A==10) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count3A++;
             turnleft90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count3A==1 || count3A==9)){
+        else if((count3A==1 || count3A==9) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count3A++;
             //add delay if needed
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150 && (count3A==2 || count3A==6)){
+        else if((count3A==2 || count3A==6) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150){
             count3A++;
             turnleft90();
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count3A==3 || count3A==5 || count3A==7 || count3A==8)){
+        else if((count3A==3 || count3A==5 || count3A==7 || count3A==8) && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count3A++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -493,7 +492,7 @@ void path_3A(){
                 }
             }
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count3A==4)){
+        else if((count3A==4) && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count3A++;
             turnright90();
         }
@@ -506,15 +505,15 @@ void path_3B(){
     read_sensors();
     calc_sensor_values();
     if(button1==0){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count3B==0 || count3B==4 || count3B==8 || count3B==10)){
+        if((count3B==0 || count3B==4 || count3B==8 || count3B==10) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count3B++;
             turnleft90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count3B==1 || count3B==9)){
+        else if((count3B==1 || count3B==9) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count3B++;
             //add delay if needed
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count3B==2 || count3B==3 || count3B==5 || count3B==7)){
+        else if((count3B==2 || count3B==3 || count3B==5 || count3B==7) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count3B++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -525,22 +524,22 @@ void path_3B(){
                 }
             }
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count3B==6)){
+        else if((count3B==6) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count3B++;
             turnright90();
         }
         //last k liye condition
     }
     else if(button1==1){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count3B==0 || count3B==4 || count3B==8 || count3B==10)){
+        if((count3B==0 || count3B==4 || count3B==8 || count3B==10) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count3B++;
             turnright90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count3B==1 || count3B==9)){
+        else if((count3B==1 || count3B==9) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count3B++;
             //add delay if needed
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150 && (count3B==2 || count3B==3 || count3B==5 || count3B==7)){
+        else if((count3B==2 || count3B==3 || count3B==5 || count3B==7) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150){
             count3B++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -551,7 +550,7 @@ void path_3B(){
                 }
             }
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150 && (count3B==6)){
+        else if((count3B==6) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150){
             count3B++;
             turnleft90();
         }
@@ -564,23 +563,23 @@ void path_4A(){
     read_sensors();
     calc_sensor_values();
     if(button1==0){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4A==0)){
+        if((count4A==0) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4A++;
             turnright90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4A==1 || count4A==4 || count4A==8 || count4A==12 || count4A==14)){
+        else if((count4A==1 || count4A==4 || count4A==8 || count4A==12 || count4A==14) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4A++;
             //add delay if needed
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4A==2 || count4A==6 || count4A==13)){
+        else if((count4A==2 || count4A==6 || count4A==13) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4A++;
             turnright90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count4A==3 || count4A==5 || count4A==15)){
+        else if((count4A==3 || count4A==5 || count4A==15) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count4A++;
             turnleft90();
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4A==7 || count4A==9 || count4A==11)){
+        else if((count4A==7 || count4A==9 || count4A==11) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4A++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -591,7 +590,7 @@ void path_4A(){
                 }
             }
         }
-        else if(sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400 && (count4A==10)){
+        else if((count4A==10) && sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400){
             count4A++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -605,23 +604,23 @@ void path_4A(){
         //last k liye condition
     }
     else if(button1==1){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4A==0)){
+        if((count4A==0) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4A++;
             turnleft90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4A==1 || count4A==4 || count4A==8 || count4A==12 || count4A==14)){
+        else if((count4A==1 || count4A==4 || count4A==8 || count4A==12 || count4A==14) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4A++;
             //add delay if needed
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150 && (count4A==2 || count4A==6 || count4A==13)){
+        else if((count4A==2 || count4A==6 || count4A==13) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150){
             count4A++;
             turnleft90();
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count4A==3 || count4A==5 || count4A==15)){
+        else if((count4A==3 || count4A==5 || count4A==15) && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count4A++;
             turnright90();
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150 && (count4A==7 || count4A==9 || count4A==11)){
+        else if((count4A==7 || count4A==9 || count4A==11) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150){
             count4A++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -632,7 +631,7 @@ void path_4A(){
                 }
             }
         }
-        else if(sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400 && (count4A==10)){
+        else if((count4A==10) && sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400){
             count4A++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -652,15 +651,15 @@ void path_4B(){
     read_sensors();
     calc_sensor_values();
     if(button1==0){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4B==0 || count4B==5 || count4B==16)){
+        if((count4B==0 || count4B==5 || count4B==16) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4B++;
             turnleft90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4B==1 || count4B==9 || count4B==13 || count4B==15)){
+        else if((count4B==1 || count4B==9 || count4B==13 || count4B==15) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4B++;
             //add delay if needed
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4B==2 || count4B==3 || count4B==8 || count4B==10 || count4B==12)){
+        else if((count4B==2 || count4B==3 || count4B==8 || count4B==10 || count4B==12) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4B++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -671,11 +670,11 @@ void path_4B(){
                 }
             }
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4B==4 || count4B==7)){
+        else if((count4B==4 || count4B==7) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4B++;
             turnright90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count4B==6)){
+        else if((count4B==6) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count4B++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -686,7 +685,7 @@ void path_4B(){
                 }
             }
         }
-        else if(sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400 && (count4B==11)){
+        else if((count4B==11) && sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400){
             count4B++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -697,22 +696,22 @@ void path_4B(){
                 }
             }
         }
-        else if(sensor[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4B==14)){
+        else if((count4B==14) && sensor[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4B++;
             turnright90();
         }
         //last k liye condition
     }
     else if(button1==1){
-        if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4B==0 || count4B==5 || count4B==16)){
+        if((count4B==0 || count4B==5 || count4B==16) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4B++;
             turnright90();
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4B==1 || count4B==9 || count4B==13 || count4B==15)){
+        else if((count4B==1 || count4B==9 || count4B==13 || count4B==15) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4B++;
             //add delay if needed
         }
-        else if(sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150 && (count4B==2 || count4B==3 || count4B==8 || count4B==10 || count4B==12)){
+        else if((count4B==2 || count4B==3 || count4B==8 || count4B==10 || count4B==12) && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[0]<150){
             count4B++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -723,11 +722,11 @@ void path_4B(){
                 }
             }
         }
-        else if(sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150 && (count4B==4 || count4B==7)){
+        else if((count4B==4 || count4B==7) && sensor_value[0]<150 && sensor_value[1]<150 && sensor_value[2]<150 && sensor_value[3]<150){
             count4B++;
             turnleft90();
         }
-        else if(sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150 && (count4B==6)){
+        else if((count4B==6) && sensor_value[3]<150 && sensor_value[1]<150 && sensor_value[2]<150){
             count4B++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -738,7 +737,7 @@ void path_4B(){
                 }
             }
         }
-        else if(sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400 && (count4B==11)){
+        else if((count4B==11) && sensor_value[0]>400 && sensor_value[1]>400 && sensor_value[2]>400 && sensor_value[3]>400){
             count4B++;
             while(1){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
@@ -749,7 +748,7 @@ void path_4B(){
                 }
             }
         }
-        else if(sensor[1]<150 && sensor_value[2]<150 && sensor_value[0]<150 && (count4B==14)){
+        else if((count4B==14) && ssensor[1]<150 && sensor_value[2]<150 && sensor_value[0]<150){
             count4B++;
             turnleft90();
         }
@@ -767,13 +766,19 @@ void line_follow_task(void *arg)
   	while(1)
 	{
 	    read_sensors();
-
 	    calc_sensor_values();
 	    calculate_error();
 	    calculate_correction();
 	    left_pwm = constrain((opt - correction), lower_pwm_constrain, higher_pwm_constrain);
 	    right_pwm = constrain((opt + correction), lower_pwm_constrain, higher_pwm_constrain);
 	    bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, left_pwm, right_pwm);
+        if(button2==1) path_1();
+        else if(button3==1) path_2A();
+        else if(button4==1) path_2B();
+        else if(button5==1) path_3A();
+        else if(button6==1) path_3B();
+        else if(button7==1) path_4A();
+        else if(button8==1) path_4B();
 	}
 
 }
