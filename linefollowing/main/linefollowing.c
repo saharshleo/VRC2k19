@@ -16,6 +16,7 @@ adc1_channel_t channel[4] = {ADC_CHANNEL_7, ADC_CHANNEL_6, ADC_CHANNEL_0, ADC_CH
 
 int weights[4] = {3,1,-1,-3};
 
+int black = 400;
 /*
  * Line Following PID Constants
  */
@@ -38,7 +39,7 @@ float forward_buffer = 3;
 /*
  * Motor value constraints
  */
-float opt = 75;
+float opt = 80;
 float lower_pwm_constrain = 65;
 float higher_pwm_constrain = 85;
 float left_pwm = 0, right_pwm = 0;
@@ -90,7 +91,7 @@ static void calculate_error()
 
     for(int i = 0; i < 4; i++)
     {
-        if(sensor_value[i] > 400)
+        if(sensor_value[i] > black)
         {
             all_black_flag = 0;
         }
@@ -156,29 +157,29 @@ void line_follow_task(void *arg)
 }
 
 //Create an HTTP server to tune variables wirelessly 
-void http_server(void *arg)
-{
-    printf("%s\n", "http task");
-    struct netconn *conn, *newconn;
-    err_t err;
-    conn = netconn_new(NETCONN_TCP);
-    netconn_bind(conn, NULL, 80);
-    netconn_listen(conn);
-    do {
-     err = netconn_accept(conn, &newconn);
-     if (err == ERR_OK) {
-       http_server_netconn_serve(newconn,&setpoint,&pitch_kP,&pitch_kD,&pitch_kI,&kP,&kD,&kI, &forward_offset, &forward_buffer);
-       netconn_delete(newconn);
-     }
-    } while(err == ERR_OK);
-    netconn_close(conn);
-    netconn_delete(conn);
-}
+// void http_server(void *arg)
+// {
+//     printf("%s\n", "http task");
+//     struct netconn *conn, *newconn;
+//     err_t err;
+//     conn = netconn_new(NETCONN_TCP);
+//     netconn_bind(conn, NULL, 80);
+//     netconn_listen(conn);
+//     do {
+//      err = netconn_accept(conn, &newconn);
+//      if (err == ERR_OK) {
+//        http_server_netconn_serve(newconn,&setpoint,&pitch_kP,&pitch_kD,&pitch_kI,&kP,&kD,&kI, &forward_offset, &forward_buffer);
+//        netconn_delete(newconn);
+//      }
+//     } while(err == ERR_OK);
+//     netconn_close(conn);
+//     netconn_delete(conn);
+// }
 
 
 void app_main()
 {
-    initialise_wifi();
+    // initialise_wifi();
     xTaskCreate(&line_follow_task,"line_follow_task",100000,NULL,1,NULL);
-    xTaskCreate(&http_server, "http_server", 10000, NULL, 2, NULL);
+    // xTaskCreate(&http_server, "http_server", 10000, NULL, 2, NULL);
 }
