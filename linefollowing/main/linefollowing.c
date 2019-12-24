@@ -41,7 +41,7 @@ float forward_buffer = 3;
  */
 float opt = 80;
 float lower_pwm_constrain = 65;
-float higher_pwm_constrain = 85;
+float higher_pwm_constrain = 95; //****************** |:D |
 float left_pwm = 0, right_pwm = 0;
 
 /*

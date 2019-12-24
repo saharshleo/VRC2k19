@@ -40,9 +40,14 @@ float forward_buffer = 3;
 /*
  * Motor value constraints
  */
+float forward_speed = 75;
+float turning_speed = 80;
+float slope_speed_up = 95;
+float slope_speed_down = 73;
+
 float opt = 75;
 float lower_pwm_constrain = 65;
-float higher_pwm_constrain = 85;
+float higher_pwm_constrain = 95;
 float left_pwm = 0, right_pwm = 0;
 
 /*
@@ -129,13 +134,13 @@ static void calculate_correction()
 
 void turnleft90(){
 	while(1){
-		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, opt, opt);
+		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
 		read_sensors();
     	calc_sensor_values();
     	if(sensor_value[0]>black && sensor_value[3]>black) break;
 	}
     while(1){
-        bot_spot_right(MCPWM_UNIT_0, MCPWM_TIMER_0, 77, 77);
+        bot_spot_right(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed, turning_speed);
         //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 75,0);
         read_sensors();
         calc_sensor_values();
@@ -144,7 +149,7 @@ void turnleft90(){
         }
     }
     while(1){
-        bot_spot_right(MCPWM_UNIT_0, MCPWM_TIMER_0, 77,77);
+        bot_spot_right(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed, turning_speed);
         //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 75,0);
         read_sensors();
         calc_sensor_values();
@@ -156,13 +161,13 @@ void turnleft90(){
 
 void turnright90(){
 	while(1){
-		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, opt, opt);
+		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
 		read_sensors();
     	calc_sensor_values();
     	if(sensor_value[0]>black && sensor_value[3]>black) break;
 	}
     while(1){
-        bot_spot_left(MCPWM_UNIT_0, MCPWM_TIMER_0, 77, 77);
+        bot_spot_left(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed, turning_speed);
         //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 0,75);
         read_sensors();
         calc_sensor_values();
@@ -171,7 +176,7 @@ void turnright90(){
         }
     }
     while(1){
-        bot_spot_left(MCPWM_UNIT_0, MCPWM_TIMER_0, 77, 77);
+        bot_spot_left(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed, turning_speed);
         //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 0,75);
         read_sensors();
         calc_sensor_values();
@@ -180,33 +185,6 @@ void turnright90(){
         }
     }
 }
-
-void slopeturnright(){
-	while(1){
-		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, opt, opt);
-		read_sensors();
-    	calc_sensor_values();
-    	if(sensor_value[0]>black) break;
-	}
-    while(1){
-        bot_spot_left(MCPWM_UNIT_0, MCPWM_TIMER_0, opt, opt);
-        //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 0,75);
-        read_sensors();
-        calc_sensor_values();
-        if(sensor_value[1]>black && sensor_value[2]>black){
-            break;
-        }
-    }
-    while(1){
-        bot_spot_left(MCPWM_UNIT_0, MCPWM_TIMER_0, opt, opt);
-        //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 0,75);
-        read_sensors();
-        calc_sensor_values();
-        if(sensor_value[1]<white && sensor_value[2]<white){
-            break;
-        }
-    }
-} 
 
 void slope_follow_task(void *arg)
 {
@@ -221,59 +199,31 @@ void slope_follow_task(void *arg)
 	    right_pwm = constrain((opt + correction), lower_pwm_constrain, higher_pwm_constrain);
 	    bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, left_pwm, right_pwm);
 
-	    if((count==0 || count==3) && sensor_value[0]<white && (sensor_value[1]<white && sensor_value[2]<white)){
+	    if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
 	    	count++;
 	    	while(1){
-	    		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, opt, opt);
-	    		read_sensors();
-	    		calc_sensor_values();
-	    		if(sensor_value[0]>black) break;
-	    	}
-	    }
-	    else if(count==1 && sensor_value[0]<white && (sensor_value[1]<white && sensor_value[2]<white)){
-	    	count++;
-	    	turnleft90();
-	    }
-	    else if(count==2 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
-	    	count++;
-	    	while(1){
-	    		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, opt, opt);
+	    		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
 	    		read_sensors();
 	    		calc_sensor_values();
 	    		if(sensor_value[0]>black && sensor_value[3]>black) break;
 	    	}
-	    	// opt = 85;
 	    }
-	    else if(count==4 && sensor_value[1]<white && sensor_value[2]<white && sensor_value[0]<white){
-	    	count++;
-	    	turnright90();
-	    	// slopeturnright();
-	    	// opt = 70;
-	    }
-	    else if(count==5 && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+	    else if(count==1 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white){
 	    	count++;
 	    	while(1){
-	    		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, opt, opt);
+	    		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
 	    		read_sensors();
 	    		calc_sensor_values();
-	    		if(sensor_value[3]>black) break;
+	    		if(sensor_value[0]>black) break;
 	    	}
+	    	opt = slope_speed_up;
 	    }
-	    else if(count==6 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+	    else if(count==2 && sensor_value[0]>black && sensor_value[1]>black && sensor_value[2]>black && sensor_value[3]>black){
 	    	count++;
-	    	turnright90();
-	    	// while(1){
-	    	// 	bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 77, 77);
-	    	// 	read_sensors();
-	    	// 	calc_sensor_values();
-	    	// 	if(sensor_value[0]>black && sensor_value[3]>black) break;
-	    	// }
-	    	// opt = 75;
+	    	bot_stop(MCPWM_UNIT_0, MCPWM_TIMER_0);
+	    	vTaskDelay(10000/10);
 	    }
-	    else if(count==6 && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
-	    	count++;
-	    	turnleft90();
-	    }
+	    
 	}
 }
 

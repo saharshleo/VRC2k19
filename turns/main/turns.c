@@ -12,8 +12,18 @@
 #include "TUNING.h"
 //using namespace std;
 
+#define LR 15     
+#define P1 2       
+#define P2A 4
+#define P2B 18  
+#define P3A 19  
+#define P3B 21  
+#define P4A 22  
+#define P4B 5
 #define LS_LEFT 32
 #define LS_RIGHT 33
+
+int lr, p1, p2a, p2b, p3a, p3b, p4a, p4b;
 
 int white = 150;
 int black = 400;
@@ -45,6 +55,11 @@ float forward_buffer = 3;
 /*
  * Motor value constraints
  */
+float forward_speed = 75;
+float turning_speed = 80;
+float slope_speed_up = 85;
+float slope_speed_down = 73;
+
 float opt = 75;
 float lower_pwm_constrain = 65;
 float higher_pwm_constrain = 85;
@@ -69,18 +84,17 @@ static void read_sensors()
     gpio_set_direction(LS_RIGHT, GPIO_MODE_INPUT);
 }
 
-// static void extra_sensors()
-// {
+void button_init(){
+	gpio_set_direction(LR,GPIO_MODE_INPUT);
+	gpio_set_direction(P1,GPIO_MODE_INPUT);
+	gpio_set_direction(P2A,GPIO_MODE_INPUT);
+	gpio_set_direction(P2B,GPIO_MODE_INPUT);
+	gpio_set_direction(P3A,GPIO_MODE_INPUT);
+	gpio_set_direction(P3B,GPIO_MODE_INPUT);
+	gpio_set_direction(P4A,GPIO_MODE_INPUT);
+	gpio_set_direction(P4B,GPIO_MODE_INPUT);    
+}
 
-//      gpio_set_direction(GPIO_NUM4,GPIO_MODE_INPUT);
-//      gpio_set_direction(GPIO_NUM5,GPIO_MODE_INPUT);
-//      gpio_set_direction(GPIO_NUM6,GPIO_MODE_INPUT);
-
-//      fx=gpio_get_level(GPIO_NUM4);  //left32
-//      y=gpio_get_level(GPIO_NUM5);  //right19
-//      x=gpio_get_level(GPIO_NUM6);  //front18
-
-// }
 
 static void calc_sensor_values()
 {
@@ -148,13 +162,13 @@ static void calculate_correction()
 
 void turnleft90(){
 	while(1){
-		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 75, 75);
+		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
 		read_sensors();
     	calc_sensor_values();
     	if(sensor_value[0]>black && sensor_value[3]>black) break;
 	}
     while(1){
-        bot_spot_right(MCPWM_UNIT_0, MCPWM_TIMER_0, 77, 77);
+        bot_spot_right(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed, turning_speed);
         //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 75,0);
         read_sensors();
         calc_sensor_values();
@@ -163,7 +177,7 @@ void turnleft90(){
         }
     }
     while(1){
-        bot_spot_right(MCPWM_UNIT_0, MCPWM_TIMER_0, 77,77);
+        bot_spot_right(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed,turning_speed);
         //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 75,0);
         read_sensors();
         calc_sensor_values();
@@ -175,13 +189,13 @@ void turnleft90(){
 
 void turnright90(){
 	while(1){
-		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 75, 75);
+		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
 		read_sensors();
     	calc_sensor_values();
     	if(sensor_value[0]>black && sensor_value[3]>black) break;
 	}
     while(1){
-        bot_spot_left(MCPWM_UNIT_0, MCPWM_TIMER_0, 77, 77);
+        bot_spot_left(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed, turning_speed);
         //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 0,75);
         read_sensors();
         calc_sensor_values();
@@ -190,7 +204,7 @@ void turnright90(){
         }
     }
     while(1){
-        bot_spot_left(MCPWM_UNIT_0, MCPWM_TIMER_0, 77, 77);
+        bot_spot_left(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed, turning_speed);
         //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 0,75);
         read_sensors();
         calc_sensor_values();
@@ -204,94 +218,206 @@ void line_follow_task(void *arg)
 {
 	//enable_buttons();
 	mcpwm_initialize();
+	button_init();
+	lr = gpio_get_level(LR);
+	p1 = gpio_get_level(P1);
+	p2a = gpio_get_level(P2A);
+	p2b = gpio_get_level(P2B);
+	p3a = gpio_get_level(P3A);
+	p3b = gpio_get_level(P3B);
+	p4a = gpio_get_level(P4A);
+	p4b = gpio_get_level(P4B);
 
-  	while(1)
-	{
-		// gpio_set_direction(LS_LEFT, GPIO_MODE_INPUT);
-		// gpio_set_direction(LS_RIGHT, GPIO_MODE_INPUT);
-	    read_sensors();
-	    int left = gpio_get_level(LS_LEFT);
-	    int right = gpio_get_level(LS_RIGHT);
-	    calc_sensor_values();
-	    calculate_error();
-	    calculate_correction();
-	    left_pwm = constrain((opt - correction), lower_pwm_constrain, higher_pwm_constrain);
-	    right_pwm = constrain((opt + correction), lower_pwm_constrain, higher_pwm_constrain);
-	    bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, left_pwm, right_pwm);
+	if(lr==1 && p1==1 && p2a==1 && p2b==1 && p3a==1 && p3b==1 && p4a==1 && p4b==1) {
+	  	while(1)
+		{
+			// gpio_set_direction(LS_LEFT, GPIO_MODE_INPUT);
+			// gpio_set_direction(LS_RIGHT, GPIO_MODE_INPUT);
+		    read_sensors();
+		    int left = gpio_get_level(LS_LEFT);
+		    int right = gpio_get_level(LS_RIGHT);
+		    calc_sensor_values();
+		    calculate_error();
+		    calculate_correction();
+		    left_pwm = constrain((opt - correction), lower_pwm_constrain, higher_pwm_constrain);
+		    right_pwm = constrain((opt + correction), lower_pwm_constrain, higher_pwm_constrain);
+		    bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, left_pwm, right_pwm);
 
-	    /* **** */
-	    // if(sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
-	    // 	//turnright90();
-	    // 	 turnleft90();
-	    // }
-	    // else if(sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && left==0){
-	    // 	//turnletf90();
-	    // 	turnright90();
+		    /* **** */
+		    // if(sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	//turnright90();
+		    // 	 turnleft90();
+		    // }
+		    // else if(sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && left==0){
+		    // 	//turnleft90();
+		    // 	turnright90();
 
-	    // }
-	    // else if(sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white && right==0){
-	    // 	//turnright90();
-	    // 	turnleft90();
-	    // }
+		    // }
+		    // else if(sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white && right==0){
+		    // 	//turnright90();
+		    // 	turnleft90();
+		    // }
 
-	    /* **** */
-	    // if(sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
-	    // 	while(1){
-		   //  	bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
-		   //  	read_sensors();
-		   //  	calc_sensor_values();
-		   //  	if(sensor_value[0]>black && sensor_value[3]>black) break;
-		   //  }
-	    // }
+		    /* **** */
+		    // if(sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	while(1){
+			   //  	bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 70, 70);
+			   //  	read_sensors();
+			   //  	calc_sensor_values();
+			   //  	if(sensor_value[0]>black && sensor_value[3]>black) break;
+			   //  }
+		    // }
 
-	    /* **** */
-	    if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
-	    	count++;
-	    	printf("1st if: %d\n", count);
-	    	turnleft90();
-	    }
-	    else if((count==1) && (sensor_value[1]<white && sensor_value[2]<white) && sensor_value[3]<white){
-	    	count++;
-	    	printf("2nd if: %d\n", count);
-	    	turnright90();
-	    }
-	    else if(count==2 && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
-	    	count++;
-	    	printf("3rd if: %d\n", count);
-	    	while(1){
-	    		//bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 75, 75);
-                turnright90();
-	    		read_sensors();
-	    		// left = gpio_get_level(LS_LEFT);
-	    		// right = gpio_get_level(LS_RIGHT);
-	    		calc_sensor_values();
-	    		if(sensor_value[3]>black) break;
-	    	}
-	    }
-	    // else if(count==3 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
-	    // 	count++;
-	    // 	printf("4th if: %d\n", count);
-	    // 	while(1){
-	    // 		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 75, 75);
-	    // 		read_sensors();
-	    // 		// left = gpio_get_level(LS_LEFT);
-	    // 		// right = gpio_get_level(LS_RIGHT);
-	    // 		calc_sensor_values();
-	    // 		if(sensor_value[0]>black && sensor_value[3]>black) break;
-	    // 	}	
-	    // }
+		    /* **** */
+		    // if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	printf("1st if: %d\n", count);
+		    // 	turnleft90();
+		    // }
+		    // else if((count==1 || count==4 || count==5) && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	printf("2nd if: %d\n", count);
+		    // 	turnright90();
+		    // }	    
+		    // else if(count==2 && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	printf("3rd if: %d\n", count);
+		    // 	while(1){
+		    // 		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
+		    // 		read_sensors();
+		    // 		calc_sensor_values();
+		    // 		if(sensor_value[3]>black) break;
+		    // 	}
+		    // }
+		    // else if(count==3 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	printf("4th if: %d\n", count);
+		    // 	while(1){
+		    // 		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
+		    // 		read_sensors();
+		    // 		calc_sensor_values();
+		    // 		if(sensor_value[0]>black && sensor_value[3]>black) break;
+		    // 	}	
+		    // }
+		    // else if(count==6 && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	turnleft90();
+		    // }
+		    /* END OF PATH1*/
 
-	    else if(count==3 && sensor_value[1]<white && sensor_value[2]<white && sensor_value[0]<white){
-	    	count++;
-	    	printf("5th if: %d\n", count);
-	    	turnleft90();
-	    }
-	    else if(count ==4 && sensor_value[0]<white && sensor_value[3]<white)
-	    {
-	    	count++;
-	    	turnleft90();
-	    }
 
+		    /* PATH2 */
+		    // if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	turnleft90();
+		    // }
+		    // else if((count==1 || count==2) && (sensor_value[1]<white && sensor_value[2]<white) && sensor_value[3]<white){
+		    // 	count++;
+		    // 	turnright90();
+		    // }	
+		    // else if(count==3 && sensor_value[0]<white && sensor_value[2]<white && sensor_value[1]<white){
+		    // 	count++;
+		    // 	turnleft90();
+		    // }
+		    // else if(count ==4 && sensor_value[0]<white && sensor_value[3]<white)
+		    // {
+		    // 	count++;
+		    // 	turnleft90();
+		    // }
+
+
+		    /*PATH BLIND */
+		    // if(count==0 && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	turnright90();
+		    // }
+		    // else if(count==1 && sensor_value[1]<white && sensor_value[2]<white && sensor_value[0]<white){
+		    // 	count++;
+		    // 	turnleft90();
+		    // } 
+		    // else if(count==2 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	while(1){
+		    // 		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
+		    // 		read_sensors();
+		    // 		calc_sensor_values();
+		    // 		if(sensor_value[0]>black && sensor_value[3]>black) break;
+		    // 	}
+		    // }
+		    // else if((count==4) && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	while(1){
+		    // 		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
+		    // 		read_sensors();
+		    // 		calc_sensor_values();
+		    // 		if(sensor_value[3]>black) break;
+		    // 	}
+		    // }
+		    // else if(count==3 && sensor_value[0]>black && sensor_value[1]>black && sensor_value[2]>black && sensor_value[3]>black){
+		    // 	count++;
+		    // 	while(1){
+		    // 		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 73, 73);
+		    // 		read_sensors();
+		    // 		calc_sensor_values();
+		    // 		if(sensor_value[0]<white || sensor_value[1]<white || sensor_value[2]<white || sensor_value[3]<white) break;
+		    // 	}
+		    // }
+		    // else if(count==5 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	turnright90();
+		    // }
+
+		    /* CROSS JUNCTION */
+		    // if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	while(1){
+		    // 		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
+		    // 		read_sensors();
+		    // 		calc_sensor_values();
+		    // 		if(sensor_value[0]>black && sensor_value[3]>black) break;
+		    // 	}
+		    // }
+		    // else if(count==1 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white){
+		    // 	count++;
+		    // 	turnleft90();
+		    // }
+		    // else if(count==2 && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	turnright90();
+		    // }
+		    // else if(count==3 && sensor_value[0]>black && sensor_value[1]>black && sensor_value[2]>black && sensor_value[3]>black){
+		    // 	count++;
+		    // 	//turnleft90();
+		    // 	while(1){
+			   //      bot_spot_right(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed, turning_speed);
+			   //      //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 0,75);
+			   //      read_sensors();
+			   //      calc_sensor_values();
+			   //      if(sensor_value[1]<white && sensor_value[2]<white && sensor_value[0]>black && sensor_value[3]>black){
+			   //          break;
+			   //      }
+    		// 	}
+		    // }
+		    // else if(count==4 && sensor_value[0]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	turnright90();
+		    // }
+
+		    /* CROSS STRAIGHT */
+		    if(count==0 && sensor_value[0]<white && sensor_value[3]<white){
+		    	count++;
+		    	while(1){
+		    		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
+		    		read_sensors();
+		    		calc_sensor_values();
+		    		if(sensor_value[0]>black || sensor_value[3]>black) break;
+		    	}
+		    }
+		    else if(count==1 && sensor_value[0]<white && sensor_value[3]<white){
+		    	count++;
+		    	turnright90();
+		    }
+		}
 	}
 }
 
