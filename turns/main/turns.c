@@ -61,7 +61,7 @@ float slope_speed_up = 90;
 float slope_speed_down = 73;
 float slow_speed = 73;
 
-float opt = 75;
+float opt = 85;
 float lower_pwm_constrain = 60;
 float higher_pwm_constrain = 90;
 float left_pwm = 0, right_pwm = 0;
@@ -229,7 +229,7 @@ void line_follow_task(void *arg)
 	p4a = gpio_get_level(P4A);
 	p4b = gpio_get_level(P4B);
 
-	if(lr==1 && p1==1 && p2a==1 && p2b==1 && p3a==1 && p3b==1 && p4a==1 && p4b==1) {
+	// if(lr==1 && p1==1 && p2a==1) {
 	  	while(1)
 		{
 			// gpio_set_direction(LS_LEFT, GPIO_MODE_INPUT);
@@ -405,21 +405,27 @@ void line_follow_task(void *arg)
 		    // }
 
 		    /* CROSS STRAIGHT */
-		    if(count==0 && sensor_value[0]<white && sensor_value[3]<white){
-		    	count++;
-		    	while(1){
-		    		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
-		    		read_sensors();
-		    		calc_sensor_values();
-		    		if(sensor_value[0]>black || sensor_value[3]>black) break;
-		    	}
-		    }
-		    else if(count==1 && sensor_value[0]<white && sensor_value[3]<white){
+		    // if(count==0 && sensor_value[0]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	while(1){
+		    // 		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
+		    // 		read_sensors();
+		    // 		calc_sensor_values();
+		    // 		if(sensor_value[0]>black || sensor_value[3]>black) break;
+		    // 	}
+		    // }
+		    // else if(count==1 && sensor_value[0]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	turnright90();
+		    // }
+
+		    /* SEE-SAW */
+		    if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
 		    	count++;
 		    	turnright90();
 		    }
 		}
-	}
+	// }
 }
 
 

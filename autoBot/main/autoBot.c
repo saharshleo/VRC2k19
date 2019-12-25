@@ -56,6 +56,7 @@ float slope_speed_up = 90;
 float slope_speed_down = 65;
 float opt_backup = 75;
 float slow_speed = 73;
+float see_saw_speed = 85;
 
 float opt = 75;
 float lower_pwm_constrain = 60;
@@ -219,10 +220,12 @@ void turnright90(){
 void path_1(){
     read_sensors();
     calc_sensor_values();
+    if(count1==0) opt = see_saw_speed;
     if(lr==0){
         if((count1==0 || count1==1 || count1==6 || count1==8) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count1++;
             //add delay if needed
+            opt = opt_backup;
             while(1){
             	bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
             	read_sensors();
@@ -267,6 +270,7 @@ void path_1(){
         if((count1==0 || count1==1 || count1==6 || count1==8) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count1++;
             //add delay if needed
+            opt = opt_backup;
             while(1){
             	bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
             	read_sensors();
