@@ -57,12 +57,13 @@ float forward_buffer = 3;
  */
 float forward_speed = 75;
 float turning_speed = 80;
-float slope_speed_up = 85;
+float slope_speed_up = 90;
 float slope_speed_down = 73;
+float slow_speed = 73;
 
 float opt = 75;
-float lower_pwm_constrain = 65;
-float higher_pwm_constrain = 85;
+float lower_pwm_constrain = 60;
+float higher_pwm_constrain = 90;
 float left_pwm = 0, right_pwm = 0;
 
 /*

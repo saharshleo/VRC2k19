@@ -51,13 +51,15 @@ int weights[4] = {3,1,-1,-3};
  * Motor value constraints
  */
 float forward_speed = 75;
-float turning_speed = 77;
-float slope_speed_up = 85;
-float slope_speed_down = 73;
+float turning_speed = 80;
+float slope_speed_up = 90;
+float slope_speed_down = 65;
+float opt_backup = 75;
+float slow_speed = 73;
 
 float opt = 75;
-float lower_pwm_constrain = 65;
-float higher_pwm_constrain = 85;
+float lower_pwm_constrain = 60;
+float higher_pwm_constrain = 95;
 float left_pwm = 0, right_pwm = 0;
 
 /*
@@ -238,9 +240,16 @@ void path_1(){
         }
         else if(count1==4 && sensor_value[0]>black && sensor_value[1]>black && sensor_value[2]>black && sensor_value[3]>black){
             count1++;
-            turnleft90();
+        	while(1){
+		        bot_spot_right(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed, turning_speed);
+		        read_sensors();
+		        calc_sensor_values();
+		        if(sensor_value[1]<white && sensor_value[2]<white && sensor_value[0]>black && sensor_value[3]>black){
+		            break;
+		        }
+			}
         }
-        else if(count1==5 && (sensor_value[0]<white || sensor_value[3]<white) && sensor_value[1]<white && sensor_value[2]<white){
+        else if(count1==5 && (sensor_value[0]<white && sensor_value[3]<white)){
             //ye condition check karna padega
             count1++;
             turnright90();
@@ -275,9 +284,16 @@ void path_1(){
         }
         else if(count1==4 && sensor_value[0]>black && sensor_value[1]>black && sensor_value[2]>black && sensor_value[3]>black){
             count1++;
-            turnright90();
+        	while(1){
+		        bot_spot_left(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed, turning_speed);
+		        read_sensors();
+		        calc_sensor_values();
+		        if(sensor_value[1]<white && sensor_value[2]<white && sensor_value[0]>black && sensor_value[3]>black){
+		            break;
+		        }
+			}
         }
-        else if(count1==5 && (sensor_value[0]<white || sensor_value[3]<white) && sensor_value[1]<white && sensor_value[2]<white){
+        else if(count1==5 && (sensor_value[0]<white && sensor_value[3]<white)){
             //ye condition check karna padega
             count1++;
             turnleft90();
@@ -296,6 +312,9 @@ void path_1(){
 void path_2A(){
     read_sensors();
     calc_sensor_values();
+    if(count2A==12){
+    	opt = slope_speed_up;
+    }
     if(lr==0){
         if((count2A==0 || count2A==2 || count2A==6 || count2A==11) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count2A++;
@@ -326,13 +345,14 @@ void path_2A(){
                 }
             }
         }
-        else if(count2A==5 && (sensor_value[0]<white || sensor_value[3]<white) && sensor_value[1]<white && sensor_value[2]<white){
+        else if(count2A==5 && (sensor_value[0]<white && sensor_value[3]<white)){
             //ye condition check karna padega
             count2A++;
             turnright90();
         }
         else if((count2A==8 || count2A==12) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white){
             count2A++;
+            opt = opt_backup;
             turnleft90();
         }
         else if((count2A==7 || count2A==9 || count2A==10) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white){
@@ -386,7 +406,7 @@ void path_2A(){
                 }
             }
         }
-        else if(count2A==5 && (sensor_value[0]<white || sensor_value[3]<white) && sensor_value[1]<white && sensor_value[2]<white){
+        else if(count2A==5 && (sensor_value[0]<white && sensor_value[3]<white)){
             //ye condition check karna padega
             count2A++;
             turnleft90();
@@ -394,6 +414,7 @@ void path_2A(){
         else if((count2A==8 || count2A==12) && sensor_value[3]<white && sensor_value[1]<white && sensor_value[2]<white){
             count2A++;
             turnright90();
+            opt = opt_backup;
         }
         else if((count2A==7 || count2A==9 || count2A==10) && sensor_value[3]<white && sensor_value[1]<white && sensor_value[2]<white){
             count2A++;
@@ -451,7 +472,7 @@ void path_2B(){
                 }
             }
         }
-        else if(count2B==5 && (sensor_value[0]<white || sensor_value[3]<white) && sensor_value[1]<white && sensor_value[2]<white){
+        else if(count2B==5 && (sensor_value[0]<white && sensor_value[3]<white)){
             //ye condition check karna padega
             count2B++;
             turnright90();
@@ -515,7 +536,7 @@ void path_2B(){
                 }
             }
         }
-        else if(count2B==5 && (sensor_value[0]<white || sensor_value[3]<white) && sensor_value[1]<white && sensor_value[2]<white){
+        else if(count2B==5 && (sensor_value[0]<white && sensor_value[3]<white)){
             //ye condition check karna padega
             count2B++;
             turnleft90();
@@ -554,6 +575,9 @@ void path_2B(){
 void path_3A(){
     read_sensors();
     calc_sensor_values();
+    if(count3A==1){
+    	opt = slope_speed_down;
+    }
     if(lr==0){
         if((count3A==0 || count3A==10) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count3A++;
@@ -568,6 +592,7 @@ void path_3A(){
             	calc_sensor_values();
             	if(sensor_value[0]>black && sensor_value[3]>black) break;
             }
+            opt = opt_backup;
         }
         else if((count3A==2 || count3A==6) && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count3A++;
@@ -610,6 +635,7 @@ void path_3A(){
             	calc_sensor_values();
             	if(sensor_value[0]>black && sensor_value[3]>black) break;
             }
+            opt = opt_backup;
         }
         else if((count3A==2 || count3A==6) && sensor_value[1]<white && sensor_value[2]<white && sensor_value[0]<white){
             count3A++;
@@ -644,9 +670,13 @@ void path_3A(){
 void path_3B(){
     read_sensors();
     calc_sensor_values();
+    if(count3B==10){
+    	opt = slope_speed_up;
+    }
     if(lr==0){
         if((count3B==0 || count3B==4 || count3B==8 || count3B==10) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count3B++;
+            if(count3B==11) opt = opt_backup;
             turnleft90();
         }
         else if((count3B==1 || count3B==9) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
@@ -685,6 +715,7 @@ void path_3B(){
     else if(lr==1){
         if((count3B==0 || count3B==4 || count3B==8 || count3B==10) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count3B++;
+            if(count3B==11) opt = opt_backup;
             turnright90();
         }
         else if((count3B==1 || count3B==9) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
@@ -726,6 +757,7 @@ void path_3B(){
 void path_4A(){
     read_sensors();
     calc_sensor_values();
+    if(count4A==1) opt = slope_speed_down;
     if(lr==0){
         if((count4A==0) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count4A++;
@@ -734,6 +766,7 @@ void path_4A(){
         else if((count4A==1 || count4A==4 || count4A==8 || count4A==12 || count4A==14) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count4A++;
             //add delay if needed
+            if(count4A==2) opt = opt_backup;
             while(1){
             	bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
             	read_sensors();
@@ -770,6 +803,7 @@ void path_4A(){
                     break;
                 }
             }
+            // opt = slow_speed; //ye dekhna padega
         }
         //last k liye condition
         else if(count4A==16 && sensor_value[1]>white && sensor_value[2]>white){
@@ -787,6 +821,7 @@ void path_4A(){
         else if((count4A==1 || count4A==4 || count4A==8 || count4A==12 || count4A==14) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count4A++;
             //add delay if needed
+            if(count4A==2) opt = opt_backup;
             while(1){
             	bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
             	read_sensors();
@@ -823,6 +858,7 @@ void path_4A(){
                     break;
                 }
             }
+            // opt = slow_speed; //ye dekhna padega
         }
         //last k liye condition
         else if(count4A==16 && sensor_value[1]>white && sensor_value[2]>white){
