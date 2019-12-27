@@ -28,6 +28,7 @@ int lr, p1, p2a, p2b, p3a, p3b, p4a, p4b;
 int white = 150;
 int black = 400;
 int count = 0;
+int count2 = 0;
 
 adc1_channel_t channel[4] = {ADC_CHANNEL_7, ADC_CHANNEL_6, ADC_CHANNEL_0, ADC_CHANNEL_3};
 
@@ -61,7 +62,7 @@ float slope_speed_up = 90;
 float slope_speed_down = 73;
 float slow_speed = 73;
 
-float opt = 85;
+float opt = 75;
 float lower_pwm_constrain = 60;
 float higher_pwm_constrain = 90;
 float left_pwm = 0, right_pwm = 0;
@@ -215,6 +216,72 @@ void turnright90(){
     }
 }
 
+void path1(){
+	read_sensors();
+	calc_sensor_values();
+	if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    	count++;
+		    	while(1){
+		    		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
+		    		read_sensors();
+		    		calc_sensor_values();
+		    		if(sensor_value[0]>black && sensor_value[3]>black) break;
+		    	}
+		    }
+		    else if(count==1 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white){
+		    	count++;
+		    	turnleft90();
+		    }
+		    else if(count==2 && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    	count++;
+		    	turnright90();
+		    }
+		    else if(count==3 && sensor_value[0]>black && sensor_value[1]>black && sensor_value[2]>black && sensor_value[3]>black){
+		    	count++;
+		    	//turnleft90();
+		    	while(1){
+			        bot_spot_right(MCPWM_UNIT_0, MCPWM_TIMER_0, turning_speed, turning_speed);
+			        //bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, 0,75);
+			        read_sensors();
+			        calc_sensor_values();
+			        if(sensor_value[1]<white && sensor_value[2]<white && sensor_value[0]>black && sensor_value[3]>black){
+			            break;
+			        }
+    			}
+		    }
+		    else if(count==4 && sensor_value[0]<white && sensor_value[3]<white){
+		    	count++;
+		    	turnright90();
+		    }
+}
+
+void path2(){
+	read_sensors();
+	calc_sensor_values();
+	if(count2==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+    	count2++;
+    	while(1){
+    		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
+    		read_sensors();
+    		calc_sensor_values();
+    		if(sensor_value[0]>black && sensor_value[3]>black) break;
+    	}
+    }
+	else if((count2==1 || count2==2) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white){
+		count2++;
+		turnleft90();
+	}
+	else if((count2==3 || count2==4) && sensor_value[3]<white && sensor_value[1]<white && sensor_value[2]<white){
+		count2++;
+		turnright90();
+	}
+	else if(count2==5 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white){
+		count2++;
+		turnright90();
+	}
+
+}
+
 void line_follow_task(void *arg)
 {
 	//enable_buttons();
@@ -243,6 +310,9 @@ void line_follow_task(void *arg)
 		    left_pwm = constrain((opt - correction), lower_pwm_constrain, higher_pwm_constrain);
 		    right_pwm = constrain((opt + correction), lower_pwm_constrain, higher_pwm_constrain);
 		    bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, left_pwm, right_pwm);
+
+		    if(p4b==1) path1();
+		    else if(p1==1) path2();
 
 		    /* **** */
 		    // if(sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
@@ -420,10 +490,10 @@ void line_follow_task(void *arg)
 		    // }
 
 		    /* SEE-SAW */
-		    if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
-		    	count++;
-		    	turnright90();
-		    }
+		    // if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+		    // 	count++;
+		    // 	turnright90();
+		    // }
 		}
 	// }
 }

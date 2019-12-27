@@ -220,12 +220,15 @@ void turnright90(){
 void path_1(){
     read_sensors();
     calc_sensor_values();
-    if(count1==0) opt = see_saw_speed;
+    if(count1==0 && p4b==1) opt = see_saw_speed + 5.0;
+    else if(count1==0 && p4a==1) opt = see_saw_speed - 3.0;
+    else if(count1==0) opt = see_saw_speed;
+
     if(lr==0){
         if((count1==0 || count1==1 || count1==6 || count1==8) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count1++;
             //add delay if needed
-            opt = opt_backup;
+            if(count1==1) opt = opt_backup;
             while(1){
             	bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
             	read_sensors();
@@ -316,9 +319,10 @@ void path_1(){
 void path_2A(){
     read_sensors();
     calc_sensor_values();
-    if(count2A==12){
-    	opt = slope_speed_up;
-    }
+    if(count2A==12 && p4b==1) opt = slope_speed_up + 5.0;
+    else if(count2A==12 && p4a==1) opt = slope_speed_up - 3.0;
+    else if(count2A==12) opt = slope_speed_up;
+
     if(lr==0){
         if((count2A==0 || count2A==2 || count2A==6 || count2A==11) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count2A++;
@@ -417,8 +421,8 @@ void path_2A(){
         }
         else if((count2A==8 || count2A==12) && sensor_value[3]<white && sensor_value[1]<white && sensor_value[2]<white){
             count2A++;
-            turnright90();
             opt = opt_backup;
+            turnright90();
         }
         else if((count2A==7 || count2A==9 || count2A==10) && sensor_value[3]<white && sensor_value[1]<white && sensor_value[2]<white){
             count2A++;
@@ -556,7 +560,7 @@ void path_2B(){
                 bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
                 read_sensors();
                 calc_sensor_values();
-                if(sensor_value[0]>black){
+                if(sensor_value[3]>black){
                     break;
                 }
             }
@@ -579,9 +583,9 @@ void path_2B(){
 void path_3A(){
     read_sensors();
     calc_sensor_values();
-    if(count3A==1){
-    	opt = slope_speed_down;
-    }
+    if(count3A==1 && p1==1) opt = slope_speed_down - 3.0;
+    else if(count3A==1) opt = slope_speed_down;
+ 
     if(lr==0){
         if((count3A==0 || count3A==10) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count3A++;
@@ -674,9 +678,9 @@ void path_3A(){
 void path_3B(){
     read_sensors();
     calc_sensor_values();
-    if(count3B==10){
-    	opt = slope_speed_up;
-    }
+    if(count3B==10 && p1==1) opt = slope_speed_down - 3.0;
+    else if(count3B==10) opt = slope_speed_up;
+
     if(lr==0){
         if((count3B==0 || count3B==4 || count3B==8 || count3B==10) && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
             count3B++;
