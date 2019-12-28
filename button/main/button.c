@@ -23,7 +23,7 @@
 #define P3A 19	//fix
 #define P3B 21	//fix
 #define P4A 22	//fix
-#define P4B 5
+#define P4B 32
 
 void button_init(){
 	gpio_set_direction(LR,GPIO_MODE_INPUT);

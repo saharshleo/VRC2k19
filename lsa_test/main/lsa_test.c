@@ -11,8 +11,8 @@
 #include "SRA18.h"
 #include "TUNING.h"
 
-#define LS_LEFT 32
-#define LS_RIGHT 33
+// #define LS_LEFT 32
+// #define LS_RIGHT 33
 
 //Declare the the channel array consisting of the ADC channel inputs
 
@@ -67,13 +67,15 @@ void sensor_task(void *arg)
 		//all-mapped
 		read_sensors();
 		calc_sensor_values();
-		gpio_set_direction(LS_LEFT, GPIO_MODE_INPUT);
-		gpio_set_direction(LS_RIGHT, GPIO_MODE_INPUT);
-		int left = gpio_get_level(LS_LEFT);
-		int right = gpio_get_level(LS_RIGHT);
+		// gpio_set_direction(LS_LEFT, GPIO_MODE_INPUT);
+		// gpio_set_direction(LS_RIGHT, GPIO_MODE_INPUT);
+		// int left = gpio_get_level(LS_LEFT);
+		// int right = gpio_get_level(LS_RIGHT);
 		for(int i=0;i<4;i++)
 		printf("RAW %d: %f\t",i,sensor_value[i]);
-		printf("LEFT: %d\tRIGHT: %d\n", left, right);		
+		printf("\n");
+
+		// printf("LEFT: %d\tRIGHT: %d\n", left, right);		
 	}
 	
 }

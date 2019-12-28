@@ -20,9 +20,9 @@
 #define P3A 19  
 #define P3B 21  
 #define P4A 22  
-#define P4B 5
-#define LS_LEFT 32
-#define LS_RIGHT 33
+#define P4B 33
+// #define LS_LEFT 32
+// #define LS_RIGHT 33
 
 int lr, p1, p2a, p2b, p3a, p3b, p4a, p4b;
 int left, right;
@@ -79,8 +79,8 @@ static void read_sensors()
         adc_reading[i] = adc1_get_raw(channel[i]);
     }
 
-    gpio_set_direction(LS_LEFT, GPIO_MODE_INPUT);
-	gpio_set_direction(LS_RIGHT, GPIO_MODE_INPUT);
+ //    gpio_set_direction(LS_LEFT, GPIO_MODE_INPUT);
+	// gpio_set_direction(LS_RIGHT, GPIO_MODE_INPUT);
 
 }
 
@@ -678,7 +678,7 @@ void path_3A(){
 void path_3B(){
     read_sensors();
     calc_sensor_values();
-    if(count3B==10 && p1==1) opt = slope_speed_down - 3.0;
+    if(count3B==10 && p1==1) opt = slope_speed_up + 3.0;
     else if(count3B==10) opt = slope_speed_up;
 
     if(lr==0){
@@ -1031,8 +1031,8 @@ void line_follow_task(void *arg)
 		p4b = gpio_get_level(P4B);
 
 		//setting up sensors
-		left = gpio_get_level(LS_LEFT);
-		right = gpio_get_level(LS_RIGHT);
+		// left = gpio_get_level(LS_LEFT);
+		// right = gpio_get_level(LS_RIGHT);
 	    read_sensors();
 	    calc_sensor_values();
 
@@ -1044,7 +1044,12 @@ void line_follow_task(void *arg)
 	    bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, left_pwm, right_pwm);
 
 	    //conditions
-        if(p1==1) path_1();
+        if(p1==1 && (p4a==1 || p4b==1)) path_1();
+        else if(p2a==1 && (p4a==1 || p4b==1)) path_2A();
+        else if(p3a==1 && p1==1) path_3A();
+        else if(p3b==1 && p1==1) path_3B();
+
+        else if(p1==1) path_1();
         else if(p2a==1) path_2A();
         else if(p2b==1) path_2B();
         else if(p3a==1) path_3A();
