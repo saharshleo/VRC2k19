@@ -15,9 +15,9 @@ adc1_channel_t channel[4] = {ADC_CHANNEL_7, ADC_CHANNEL_6, ADC_CHANNEL_0, ADC_CH
 
 int weights[4] = {3,1,-1,-3};
 
-int white = 150;
-int black = 400;
-int count = 0;
+int white = 120;
+int black = 350;
+long int count = 0;
 /*
  * Line Following PID Constants
  */
@@ -42,8 +42,8 @@ float forward_buffer = 3;
  */
 float forward_speed = 75;
 float turning_speed = 80;
-float slope_speed_up = 95;
-float slope_speed_down = 65;
+float slope_speed_up = 83;
+float slope_speed_down = 71;
 float slow_speed = 73;
 
 float opt = 75;
@@ -194,39 +194,39 @@ void slope_follow_task(void *arg)
 	mcpwm_initialize();
   	while(1)
 	{
-	    read_sensors();
-	    calc_sensor_values();
-	    calculate_error();
-	    calculate_correction();
-	    left_pwm = constrain((opt - correction), lower_pwm_constrain, higher_pwm_constrain);
-	    right_pwm = constrain((opt + correction), lower_pwm_constrain, higher_pwm_constrain);
-	    bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, left_pwm, right_pwm);
+	    // read_sensors();
+	    // calc_sensor_values();
+	    // calculate_error();
+	    // calculate_correction();
+	    // left_pwm = constrain((opt - correction), lower_pwm_constrain, higher_pwm_constrain);
+	    // right_pwm = constrain((opt + correction), lower_pwm_constrain, higher_pwm_constrain);
+	    // bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, left_pwm, right_pwm);
 
 	    /* SLOPE UP */
-	    if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
-	    	count++;
-	    	while(1){
-	    		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
-	    		read_sensors();
-	    		calc_sensor_values();
-	    		if(sensor_value[0]>black && sensor_value[3]>black) break;
-	    	}
-	    }
-	    else if(count==1 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white){
-	    	count++;
-	    	while(1){
-	    		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
-	    		read_sensors();
-	    		calc_sensor_values();
-	    		if(sensor_value[0]>black) break;
-	    	}
-	    	opt = slope_speed_up;
-	    }
-	    else if(count==2 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
-	    	count++;
-	    	opt = 75;
-	    	turnleft90();
-	    }
+	    // if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+	    // 	count++;
+	    // 	while(1){
+	    // 		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
+	    // 		read_sensors();
+	    // 		calc_sensor_values();
+	    // 		if(sensor_value[0]>black && sensor_value[3]>black) break;
+	    // 	}
+	    // }
+	    // else if(count==1 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white){
+	    // 	count++;
+	    // 	while(1){
+	    // 		bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, forward_speed, forward_speed);
+	    // 		read_sensors();
+	    // 		calc_sensor_values();
+	    // 		if(sensor_value[0]>black) break;
+	    // 	}
+	    // 	opt = slope_speed_up;
+	    // }
+	    // else if(count==2 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
+	    // 	count++;
+	    // 	opt = 75;
+	    // 	turnleft90();
+	    // }
 
 	    /* SLOPE DOWN */
 	    // if(count==0 && sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){
@@ -239,7 +239,14 @@ void slope_follow_task(void *arg)
 	    // 	opt = 75;
 	    // 	turnright90();
 	    // }
-	    
+	    printf("in\n");
+        do{
+            count++;
+        }while(count!=50000000);
+        printf("out\n");
+        count = 0;
+        // vTaskDelay(1000/10);
+
 	}
 }
 

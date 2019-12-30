@@ -14,19 +14,18 @@
 
 #define LR 15     
 #define P1 2       
-#define P2A 4
+#define P2A 33
 #define P2B 18  
 #define P3A 19  
 #define P3B 21  
 #define P4A 22  
-#define P4B 5
-#define LS_LEFT 32
-#define LS_RIGHT 33
+#define P4B 32
+
 
 int lr, p1, p2a, p2b, p3a, p3b, p4a, p4b;
 
-int white = 150;
-int black = 400;
+int white = 120;
+int black = 350;
 int count = 0;
 int count2 = 0;
 
@@ -57,7 +56,7 @@ float forward_buffer = 3;
  * Motor value constraints
  */
 float forward_speed = 75;
-float turning_speed = 80;
+float turning_speed = 77;
 float slope_speed_up = 90;
 float slope_speed_down = 73;
 float slow_speed = 73;
@@ -82,8 +81,6 @@ static void read_sensors()
     {
         adc_reading[i] = adc1_get_raw(channel[i]);
     }
-    gpio_set_direction(LS_LEFT, GPIO_MODE_INPUT);
-    gpio_set_direction(LS_RIGHT, GPIO_MODE_INPUT);
 }
 
 void button_init(){
@@ -302,8 +299,8 @@ void line_follow_task(void *arg)
 			// gpio_set_direction(LS_LEFT, GPIO_MODE_INPUT);
 			// gpio_set_direction(LS_RIGHT, GPIO_MODE_INPUT);
 		    read_sensors();
-		    int left = gpio_get_level(LS_LEFT);
-		    int right = gpio_get_level(LS_RIGHT);
+		    // int left = gpio_get_level(LS_LEFT);
+		    // int right = gpio_get_level(LS_RIGHT);
 		    calc_sensor_values();
 		    calculate_error();
 		    calculate_correction();
@@ -311,8 +308,8 @@ void line_follow_task(void *arg)
 		    right_pwm = constrain((opt + correction), lower_pwm_constrain, higher_pwm_constrain);
 		    bot_forward(MCPWM_UNIT_0, MCPWM_TIMER_0, left_pwm, right_pwm);
 
-		    if(p4b==1) path1();
-		    else if(p1==1) path2();
+		    if(p2b==1 && p1==1 && p3a==1) {printf("1\n");}
+		    // else if(p1==1) path2();
 
 		    /* **** */
 		    // if(sensor_value[0]<white && sensor_value[1]<white && sensor_value[2]<white && sensor_value[3]<white){

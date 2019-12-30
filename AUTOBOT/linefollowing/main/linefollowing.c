@@ -39,7 +39,7 @@ float forward_buffer = 3;
 /*
  * Motor value constraints
  */
-float opt = 80;
+float opt = 75;
 float lower_pwm_constrain = 60;
 float higher_pwm_constrain = 95; //****************** |:D |
 float left_pwm = 0, right_pwm = 0;

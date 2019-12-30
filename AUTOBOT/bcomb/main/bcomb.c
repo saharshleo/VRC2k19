@@ -14,11 +14,9 @@
 //32, 4, 19, 2, 21, *0, 23
 //33, 18, *5, 15, 22
 
-// #define LS_LEFT 32
-// #define LS_RIGHT 33
 #define LR 15	//fix	
 #define P1 2	//fix	
-#define P2A 4
+#define P2A 33
 #define P2B 18	//fix
 #define P3A 19	//fix
 #define P3B 21	//fix
@@ -49,8 +47,25 @@ void button_task(void *arg)
 		int p3b = gpio_get_level(P3B);
 		int p4a = gpio_get_level(P4A);
 		int p4b = gpio_get_level(P4B);
-		printf("LR: %d\tP1: %d\tP2A: %d\tP2B: %d\tP3A: %d\tP3B: %d\tP4A: %d\tP4B: %d\n", lr, p1, p2a, p2b, p3a, p3b, p4a, p4b);
+		// printf("LR: %d\tP1: %d\tP2A: %d\tP2B: %d\tP3A: %d\tP3B: %d\tP4A: %d\tP4B: %d\n", lr, p1, p2a, p2b, p3a, p3b, p4a, p4b);
 		// printf("LR: %d\tP1: %d\n", lr, p1);
+
+		//conditions
+        if(p1==1 && (p4a==1 || p4b==1)) printf("condition for path 1 with speed\n");
+
+        else if(((p2a==1) || (p2b==1 && p3a==1)) && (p4a==1 || p4b==1)) printf("condition for path 2a with speed\n");
+        else if(p3a==1 && p1==1) printf("condition for path 3a with speed\n");
+        else if(p3b==1 && p1==1) printf("condition for path 3b with speed\n");
+
+        else if(p1==1) printf("condition for path 1\n");
+
+        else if((p2a==1) || (p2b==1 && p3a==1)) printf("condition for path 2a\n");
+        else if(p2b==1) printf("condition for path 2b\n");
+        else if(p3a==1) printf("condition for path 3a\n");
+        else if(p3b==1) printf("condition for path 3b\n");
+        else if(p4a==1) printf("condition for path 4a\n");
+        else if(p4b==1) printf("condition for path 4b\n");
+
 		vTaskDelay(10 / 10);
 	}
 	
